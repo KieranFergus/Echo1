@@ -169,7 +169,7 @@ void Echo1AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
             float delayedSample = delayLine.popSample(channel); // Get delayed output
-            float inputSample = channelData[sample] + delayedSample * *getDecayTime(); // Add feedback to input
+            float inputSample = channelData[sample] + delayedSample * juce::jlimit(0.0f, 0.95f, *getDecayTime()); // Add feedback to input
             delayLine.pushSample(channel, inputSample); // Feed back into delay line
             channelData[sample] = (1.0f - *getDryWet()) * channelData[sample] + *getDryWet() * delayedSample; // Dry/wet mix
         }
